@@ -125,5 +125,24 @@ La parte en rojo nos indica donde está el error. Del paso 1 al 5 todo está cor
 
 Primero vamos a crear un usuario con el cual podamos ingresar.
 
+## Crear la migración correspondiente
+
+*php artisan migrate:make create_users_table --create=users*
+
+Edita la migración y agregale un campo de email y otro de password:
+
+Schema::create('users', function(Blueprint $table)
+        {
+            $table->increments('id');
+            $table->string('email');
+            $table->string('password');
+            $table->timestamps();
+        });
+
+Ejecutamos la migración con
+
+*php artisan migrate*
+
+## Crea un usuario inicial usando un seed
 
 
