@@ -145,4 +145,67 @@ Ejecutamos la migración con
 
 ## Crea un usuario inicial usando un seed
 
+Edita el archivo database/seeds/DatabaseSeeder.php y agrega lo siguiente:
+
+public function run()
+    {
+        Eloquent::unguard();
+
+        User::create([
+            'email' => 'testuser@mail.com',
+            'password' => Hash::make('secret')
+        ]);
+        // $this->call('UserTableSeeder');
+    }
+
+Con este código crearemos un usuario de prueba con los datos que estamos ingresando en la prueba (testuser@mail.com/secret).
+
+Ejecuta el seed usando
+
+*php artisan db:seed*
+
+En SessionsController agrega el siguiente código:
+
+		//muestra el form de login
+	 public function store()
+    {
+        $email = Input::get('email');
+        $password = Input::get('password');
+        if(Auth::attempt(['email' => $email, 'password' => $password])){
+            return Redirect::route('welcome');
+        }
+
+        return Redirect::route('login');
+    }
+    //crea la sessión
+    public function welcome()
+    {
+        return View::make('welcome')->withUser(Auth::user());
+    }
+
+Este es un login normal, que al ser validado te redirige a la ruta welcome, la cual utilizar la función welcome del mismo controlador. La ruta la puedes declarar usando:
+
+Route::get('/welcome', ['uses' => 'SessionsController@welcome', 'as' => 'welcome']);
+
+
+Luego vamos a crear la vista de welcome en /views/welcome.blade.php solamente con el siguiente código:
+
+Bienvenido {{$user->email}}
+
+Ahora si ejecutamos el test nuevamente, verás un resultado exitoso similar al siguiente:
+
+Acceptance Tests (2) ------------------------------------------------------------------------
+Trying to verificar que el login del sitio funciona correctamente (LoginCept.php)       Ok
+Trying to verificar que la ruta home funciona (WelcomeCept.php)                         Ok
+---------------------------------------------------------------------------------------------
+Unit Tests (0) ------------------------------
+---------------------------------------------
+Functional Tests (0) ------------------------
+---------------------------------------------
+Time: 492 ms, Memory: 10.00Mb
+OK (2 tests, 4 assertions)
+
+
+Hemos pasado la prueba de login que hemos escrito.
+Esto es sólo una pincelada de lo que se puede hacer con la suite de aceptación de codeception.
 

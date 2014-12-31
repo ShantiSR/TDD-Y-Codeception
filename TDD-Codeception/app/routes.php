@@ -18,3 +18,5 @@ Route::get('/', function()
 
 Route::resource('sessions', 'SessionsController');
 Route::get('/login', ['uses' => 'SessionsController@create', 'as' => 'login']);
+
+Route::get('/welcome', ['uses' => 'SessionsController@welcome', 'as' => 'welcome']);

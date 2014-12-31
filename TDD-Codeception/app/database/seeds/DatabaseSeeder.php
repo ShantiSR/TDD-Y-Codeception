@@ -8,10 +8,14 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run()
-	{
-		Eloquent::unguard();
+    {
+        Eloquent::unguard();
 
-		// $this->call('UserTableSeeder');
-	}
+        User::create([
+            'email' => 'testuser@mail.com',
+            'password' => Hash::make('secret')
+        ]);
+        // $this->call('UserTableSeeder');
+    }
 
 }
